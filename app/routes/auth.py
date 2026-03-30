@@ -7,7 +7,7 @@ from app.models.user import User
 from app.schemas.user import UserCreate
 from app.core.security import hash_password, verify_password, create_access_token
 
-# 🔐 OAuth2 (corrigido pro Swagger)
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 router = APIRouter(
@@ -15,7 +15,7 @@ router = APIRouter(
     tags=["Auth"]
 )
 
-# 📦 DB session
+
 def get_db():
     db = SessionLocal()
     try:
@@ -23,7 +23,7 @@ def get_db():
     finally:
         db.close()
 
-# 🧾 REGISTER
+
 @router.post("/register")
 def register(user: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == user.email).first()
@@ -42,13 +42,13 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
 
     return {"message": "User created successfully"}
 
-# 🔑 LOGIN (corrigido com DB + JWT)
+
 @router.post("/login")
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
-    email = form_data.username  # 👈 aqui é o email
+    email = form_data.username 
     password = form_data.password
 
     user = db.query(User).filter(User.email == email).first()
